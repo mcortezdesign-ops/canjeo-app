@@ -486,6 +486,7 @@
     <div class="perfil-body">
       <p class="perfil-seccion-titulo">Mis ofertas activas</p>
       <div id="perfil-ofertas-lista"></div>
+      <button class="btn-secundario" onclick="abrirEditarPerfil()" style="margin-bottom:4px">✏️ Editar mi perfil</button>
       <button class="btn-secundario" onclick="mostrarPantalla('p-publicar')">+ Agregar oferta</button>
       <button class="btn-secundario" onclick="mostrarPantalla('p-terminos')" style="margin-top:4px">Términos y Condiciones</button>
       <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-top:12px;">Consultas: <a href="mailto:hola@canjeo.com.ar" style="color:var(--verde-oscuro);font-weight:600;text-decoration:none;">hola@canjeo.com.ar</a></p>
@@ -530,6 +531,27 @@
         <div class="campo" style="margin-top:8px"><label>Comentario opcional</label><input type="text" id="val-comentario" placeholder="Ej: Puntual, buena onda. Lo recomiendo."></div>
         <button class="btn-verde" onclick="enviarValoracion()">Enviar valoración</button>
       </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA EDITAR PERFIL -->
+  <div class="pantalla" id="p-editar-perfil">
+    <div class="topbar">
+      <button class="btn-back" onclick="mostrarPantalla('p-perfil')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M13 16L7 10l6-6" stroke="#1A2B12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="topbar-titulo">Editar perfil</span>
+      <div style="width:32px"></div>
+    </div>
+    <div style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;padding-bottom:40px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 0;">
+        <div id="editar-foto-circulo" onclick="document.getElementById('editar-foto-input').click()" style="width:80px;height:80px;border-radius:50%;background:var(--verde-claro);border:2px dashed rgba(91,189,47,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#5BBD2F" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#5BBD2F" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <input type="file" id="editar-foto-input" accept="image/*" style="display:none" onchange="previsualizarFotoEditar(this)">
+        <p style="font-size:0.78rem;color:var(--texto-suave);">Tocá para cambiar tu foto</p>
+      </div>
+      <div class="campo"><label>Tu nombre</label><input type="text" id="editar-nombre" placeholder="Tu nombre"></div>
+      <div class="campo"><label>Tu barrio o localidad</label><input type="text" id="editar-barrio" placeholder="Ej: Quilmes Centro"></div>
+      <button class="btn-verde" onclick="guardarEdicionPerfil()">Guardar cambios</button>
     </div>
   </div>
 
@@ -647,6 +669,35 @@
       eliminarOferta: async (id) => {
         const res = await fetch(`${FB_BASE}/ofertas/${id}?key=${FB_API_KEY}`, { method: 'DELETE' });
         if (!res.ok) { const d = await res.json(); throw new Error(d.error?.message || 'Error eliminando'); }
+      },
+
+      guardarUsuario: async (usuario) => {
+        const fields = {
+          nombre: { stringValue: usuario.nombre || '' },
+          tel: { stringValue: usuario.tel || '' },
+          barrio: { stringValue: usuario.barrio || '' },
+          foto: { stringValue: usuario.foto || '' },
+          fecha: { timestampValue: new Date().toISOString() }
+        };
+        const res = await fetch(`${FB_BASE}/usuarios/${encodeURIComponent(usuario.tel)}?key=${FB_API_KEY}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields })
+        });
+        if (!res.ok) { const d = await res.json(); throw new Error(d.error?.message || 'Error guardando usuario'); }
+      },
+
+      recuperarUsuario: async (tel) => {
+        const res = await fetch(`${FB_BASE}/usuarios/${encodeURIComponent(tel)}?key=${FB_API_KEY}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        const f = data.fields || {};
+        return {
+          nombre: f.nombre?.stringValue || '',
+          tel: f.tel?.stringValue || '',
+          barrio: f.barrio?.stringValue || '',
+          foto: f.foto?.stringValue || '',
+        };
       }
     };
     window._fbReady = true;
@@ -730,11 +781,13 @@
       const acepto = document.getElementById('acepto-terminos').checked;
       const digitosTel = tel.replace(/\D/g, '');
       if (!nombre || !tel || !barrio) { alert('Completá todos los campos para continuar.'); return; }
-      if (digitosTel.length < 10) { alert('El número de WhatsApp parece incompleto. Revisá que tenga el código de área. Ej: +54 9 11 1234 5678'); return; }
+      if (digitosTel.length < 10) { alert('El número de WhatsApp parece incompleto. Revisá que tenga el código de área. Ej: 11 1234 5678 (GBA) · 341 123 4567 (Rosario)'); return; }
       if (!acepto) { alert('Debés aceptar los Términos y Condiciones para continuar.'); return; }
       mostrarLoading('Creando tu cuenta...');
-      const guardar = (fotoUrl) => {
-        localStorage.setItem('canjeo_usuario', JSON.stringify({ nombre, tel, barrio, foto: fotoUrl, fecha: new Date().toISOString() }));
+      const guardar = async (fotoUrl) => {
+        const usuario = { nombre, tel, barrio, foto: fotoUrl, fecha: new Date().toISOString() };
+        localStorage.setItem('canjeo_usuario', JSON.stringify(usuario));
+        try { await window._fb.guardarUsuario(usuario); } catch(e) { console.error('Error guardando usuario en Firebase:', e); }
         ocultarLoading(); mostrarPantalla('p-hall');
       };
       if (fotoPerfilBlob) subirFotoPerfilCloudinary(fotoPerfilBlob).then(url => guardar(url)).catch(() => guardar(''));
@@ -1072,6 +1125,54 @@
         document.getElementById('visor-contador').textContent = `${visorIndex + 1} / ${visorFotos.length}`;
       }
     });
+
+    let fotoEditarBlob = null;
+
+    function abrirEditarPerfil() {
+      const u = JSON.parse(localStorage.getItem('canjeo_usuario') || '{}');
+      document.getElementById('editar-nombre').value = u.nombre || '';
+      document.getElementById('editar-barrio').value = u.barrio || '';
+      fotoEditarBlob = null;
+      const circulo = document.getElementById('editar-foto-circulo');
+      circulo.innerHTML = u.foto
+        ? `<img src="${u.foto}" style="width:100%;height:100%;object-fit:cover;">`
+        : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#5BBD2F" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#5BBD2F" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+      mostrarPantalla('p-editar-perfil');
+    }
+
+    function previsualizarFotoEditar(input) {
+      if (input.files && input.files[0]) {
+        convertirAJpeg(input.files[0]).then(blob => {
+          fotoEditarBlob = blob;
+          const url = URL.createObjectURL(blob);
+          document.getElementById('editar-foto-circulo').innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+        });
+      }
+    }
+
+    async function guardarEdicionPerfil() {
+      const nombre = document.getElementById('editar-nombre').value.trim();
+      const barrio = document.getElementById('editar-barrio').value.trim();
+      if (!nombre || !barrio) { alert('Completá todos los campos.'); return; }
+      mostrarLoading('Guardando cambios...');
+      const u = JSON.parse(localStorage.getItem('canjeo_usuario') || '{}');
+      const guardar = async (fotoUrl) => {
+        const usuario = { ...u, nombre, barrio, foto: fotoUrl || u.foto || '' };
+        localStorage.setItem('canjeo_usuario', JSON.stringify(usuario));
+        try { await window._fb.guardarUsuario(usuario); } catch(e) { console.error(e); }
+        ocultarLoading();
+        mostrarPantalla('p-perfil');
+      };
+      if (fotoEditarBlob) subirFotoPerfilCloudinary(fotoEditarBlob).then(url => guardar(url)).catch(() => guardar(null));
+      else guardar(null);
+    }
+
+    async function intentarRecuperarPerfil() {
+      const guardado = localStorage.getItem('canjeo_usuario');
+      if (guardado) { mostrarPantalla('p-hall'); return; }
+      // Si no hay datos locales, mostrar registro
+      mostrarPantalla('p-bienvenida');
+    }
 
     function mostrarPantalla(id) {
       const actual = document.querySelector('.pantalla.activa');
