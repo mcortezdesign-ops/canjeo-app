@@ -13,7 +13,6 @@
   <meta name="description" content="Canjeo es la app gratuita de trueque e intercambio entre vecinos. Intercambiá lo que tenés por lo que querés. Sin dinero, sin intermediarios. Argentina.">
   <meta name="keywords" content="canjeo, trueque, intercambio, app trueque argentina, intercambio quilmes, canjear, app intercambio vecinos, trueque buenos aires">
   <meta name="author" content="Miguel Ángel Cortez — Cortez Diseño">
-  <meta name="google-site-verification" content="8SYCTQOxfBdvOehDfML0Zr50DcR8fV-iME3xy0SEq0I" />
   <meta property="og:title" content="Canjeo — Intercambiá lo que tenés por lo que querés">
   <meta property="og:description" content="La app gratuita de trueque e intercambio entre vecinos. Sin dinero, sin intermediarios. Disponible en toda Argentina.">
   <meta property="og:url" content="https://app.canjeo.com.ar">
@@ -292,10 +291,11 @@
       <div class="campo"><label>Tu nombre</label><input type="text" id="reg-nombre" placeholder="Ej: Martín"></div>
       <div class="campo">
         <label>Número de WhatsApp</label>
-        <input type="tel" id="reg-tel" placeholder="+54 9 11 ...">
+        <input type="tel" id="reg-tel" placeholder="+54 9 11 1234 5678" oninput="validarTelefono(this)">
+        <p id="tel-error" style="display:none;font-size:0.72rem;color:#c0392b;margin-top:4px;font-weight:600;">⚠️ Revisá el número — incluí el código de área. Ej: +54 9 11 1234 5678 (GBA) · +54 9 341 123 4567 (Rosario)</p>
         <div class="aviso-wsp" style="margin-top:8px">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3A8A1A" stroke-width="1.2"/><path d="M8 7v4M8 5.5v.5" stroke="#3A8A1A" stroke-width="1.3" stroke-linecap="round"/></svg>
-          <p><strong>Tu número será visible</strong> para quienes quieran contactarte. Usá tu número real de WhatsApp.</p>
+          <p><strong>Tu número será visible</strong> para quienes quieran contactarte. Usá tu número real de WhatsApp con código de área.</p>
         </div>
       </div>
       <div class="campo"><label>Tu barrio o localidad</label><input type="text" id="reg-barrio" placeholder="Ej: Quilmes Centro"></div>
@@ -669,6 +669,16 @@
     let visorFotos = [];
     let descExpandida = false;
 
+    function validarTelefono(input) {
+      const digitos = input.value.replace(/\D/g, '');
+      const error = document.getElementById('tel-error');
+      if (digitos.length > 0 && digitos.length < 10) {
+        error.style.display = 'block';
+      } else {
+        error.style.display = 'none';
+      }
+    }
+
     function mostrarLoading(txt) { document.getElementById('loading').classList.remove('oculto'); document.querySelector('.loading-txt').textContent = txt || 'Cargando...'; }
     function ocultarLoading() { document.getElementById('loading').classList.add('oculto'); }
 
@@ -718,7 +728,9 @@
       const tel = document.getElementById('reg-tel').value.trim();
       const barrio = document.getElementById('reg-barrio').value.trim();
       const acepto = document.getElementById('acepto-terminos').checked;
+      const digitosTel = tel.replace(/\D/g, '');
       if (!nombre || !tel || !barrio) { alert('Completá todos los campos para continuar.'); return; }
+      if (digitosTel.length < 10) { alert('El número de WhatsApp parece incompleto. Revisá que tenga el código de área. Ej: +54 9 11 1234 5678'); return; }
       if (!acepto) { alert('Debés aceptar los Términos y Condiciones para continuar.'); return; }
       mostrarLoading('Creando tu cuenta...');
       const guardar = (fotoUrl) => {
