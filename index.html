@@ -93,12 +93,17 @@
     .hall-publicar:active { transform: scale(0.97); }
     .hall-seccion-titulo { font-size: 0.78rem; font-weight: 700; color: var(--texto-suave); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
     .hall-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .hall-cat { background: var(--blanco); border-radius: 14px; border: 1px solid rgba(91,189,47,0.12); padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .hall-cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .hall-cat { background: var(--verde); border-radius: 14px; border: none; padding: 16px 12px; display: flex; flex-direction: row; align-items: center; gap: 12px; cursor: pointer; transition: transform 0.15s, background 0.15s; box-shadow: 0 3px 12px rgba(91,189,47,0.25); }
     .hall-cat:active { transform: scale(0.96); }
-    .hall-cat:hover { box-shadow: 0 4px 16px rgba(91,189,47,0.12); }
-    .hall-cat-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
-    .hall-cat-nombre { font-size: 0.72rem; font-weight: 700; color: var(--texto); text-align: center; line-height: 1.3; }
-    .hall-cat-count { font-size: 0.65rem; color: #9BBF88; }
+    .hall-cat:hover { background: var(--verde-oscuro); }
+    .hall-cat-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hall-cat-icon svg path, .hall-cat-icon svg circle, .hall-cat-icon svg rect { stroke: white; }
+    .hall-cat-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .hall-cat-nombre { font-size: 0.82rem; font-weight: 700; color: white; line-height: 1.2; }
+    .hall-cat-sub { font-size: 0.68rem; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hall-ver-mas { width: 100%; height: 44px; border-radius: 12px; background: transparent; border: 1.5px solid var(--verde); color: var(--verde-oscuro); font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s; margin-top: 4px; }
+    .hall-ver-mas:hover { background: var(--verde-claro); }
     .hall-ver-todo { width: 100%; height: 44px; border-radius: 12px; background: transparent; border: 1.5px solid rgba(91,189,47,0.3); color: var(--verde-oscuro); font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
     .hall-ver-todo:hover { background: var(--verde-claro); }
 
@@ -142,6 +147,8 @@
     .cats-wrap { display: flex; flex-direction: column; gap: 8px; }
     .cat-pill { height: 48px; border-radius: 12px; border: 1.5px solid rgba(91,189,47,0.2); padding: 0 16px; font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--texto-suave); background: var(--blanco); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 12px; text-align: left; width: 100%; }
     .cat-pill.seleccionada { background: var(--verde-claro); border-color: var(--verde); color: var(--verde-oscuro); }
+    .cat-pill-pub svg path, .cat-pill-pub svg circle, .cat-pill-pub svg rect { stroke: #9BBF88; }
+    .cat-pill-pub.seleccionada svg path, .cat-pill-pub.seleccionada svg circle, .cat-pill-pub.seleccionada svg rect { stroke: var(--verde-oscuro); }
     .label-verde { font-size: 0.78rem; font-weight: 600; color: var(--verde-oscuro); }
     .campo-hint { font-size: 0.72rem; color: #9BBF88; margin-top: 4px; }
     .regalo-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; }
@@ -257,17 +264,29 @@
     }
 
     const CATEGORIAS = [
-      { id: 'servicios',    nombre: 'Servicios',    emoji: '🔧' },
-      { id: 'objetos',      nombre: 'Objetos',      emoji: '📦' },
-      { id: 'jardineria',   nombre: 'Jardinería',   emoji: '🌿' },
-      { id: 'vehiculos',    nombre: 'Vehículos',    emoji: '🚗' },
-      { id: 'vestimenta',   nombre: 'Vestimenta',   emoji: '👕' },
-      { id: 'herramientas', nombre: 'Herramientas', emoji: '🔨' },
-      { id: 'muebles',      nombre: 'Muebles',      emoji: '🛋️' },
-      { id: 'regalos',      nombre: 'Regalos',      emoji: '🎁' },
-      { id: 'otro',         nombre: 'Otros',        emoji: '✨' },
-      { id: 'todo',         nombre: 'Todo',         emoji: '🔍' },
+      { id: 'servicios',      nombre: 'Servicios',          sub: 'Enseñanza, oficios' },
+      { id: 'libros',         nombre: 'Libros',             sub: 'Lectura, revistas' },
+      { id: 'tecnologia',     nombre: 'Tecnología',         sub: 'Electrónica, gadgets' },
+      { id: 'herramientas',   nombre: 'Herramientas',       sub: 'Bricolaje, taller' },
+      { id: 'vehiculos',      nombre: 'Vehículos',          sub: 'Autos, motos, bici' },
+      { id: 'musica',         nombre: 'Música',             sub: 'Discos, entretenimiento' },
+      { id: 'juguetes',       nombre: 'Juguetes',           sub: 'Juegos, niños' },
+      { id: 'jardineria',     nombre: 'Jardinería',         sub: 'Plantas, semillas' },
+      { id: 'deportes',       nombre: 'Deportes',           sub: 'Fitness, aire libre' },
+      { id: 'camping',        nombre: 'Camping',            sub: 'Aire libre, aventura' },
+      { id: 'instrumentos',   nombre: 'Instrumentos',       sub: 'Musicales' },
+      { id: 'fotografia',     nombre: 'Fotografía',         sub: 'Audiovisual, cámaras' },
+      { id: 'hogar',          nombre: 'Hogar',              sub: 'Decoración, muebles' },
+      { id: 'ropa',           nombre: 'Ropa',               sub: 'Accesorios, vestimenta' },
+      { id: 'coleccionables', nombre: 'Coleccionables',     sub: 'Antigüedades, arte' },
+      { id: 'construccion',   nombre: 'Construcción',       sub: 'Materiales, herramientas' },
+      { id: 'artesanales',    nombre: 'Artesanales',        sub: 'Productos hechos a mano' },
+      { id: 'regalos',        nombre: 'Regalos',            sub: 'Donaciones, gratis' },
+      { id: 'otros',          nombre: 'Otros',              sub: 'Varios' },
+      { id: 'todo',           nombre: 'Todo',               sub: 'Ver todo' },
     ];
+
+    const CATS_PRINCIPALES = ['servicios','libros','tecnologia','herramientas','vehiculos','musica','juguetes','jardineria'];
   </script>
 
   <div class="loading-overlay oculto" id="loading">
@@ -331,6 +350,7 @@
       <div>
         <p class="hall-seccion-titulo">¿Qué buscás?</p>
         <div class="hall-cats" id="hall-cats"></div>
+        <button class="hall-ver-mas" id="hall-ver-mas-btn" onclick="toggleTodasCats()" style="margin-top:10px;">Ver todas las categorías ▾</button>
       </div>
       <button class="hall-publicar" onclick="mostrarPantalla('p-publicar')">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5"/><path d="M10 6v8M6 10h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -607,16 +627,30 @@
         const catCompat = {
           'regalo': 'regalos',
           'plantas': 'jardineria',
-          'comestibles': 'objetos',
-          'otro': 'otro',
+          'comestibles': 'otros',
+          'otro': 'otros',
+          'objetos': 'otros',
+          'vestimenta': 'ropa',
+          'muebles': 'hogar',
           'servicios': 'servicios',
-          'objetos': 'objetos',
           'vehiculos': 'vehiculos',
           'jardineria': 'jardineria',
-          'vestimenta': 'vestimenta',
           'herramientas': 'herramientas',
-          'muebles': 'muebles',
           'regalos': 'regalos',
+          'libros': 'libros',
+          'tecnologia': 'tecnologia',
+          'musica': 'musica',
+          'juguetes': 'juguetes',
+          'deportes': 'deportes',
+          'camping': 'camping',
+          'instrumentos': 'instrumentos',
+          'fotografia': 'fotografia',
+          'hogar': 'hogar',
+          'ropa': 'ropa',
+          'coleccionables': 'coleccionables',
+          'construccion': 'construccion',
+          'artesanales': 'artesanales',
+          'otros': 'otros',
         };
 
         // Cargar todas las páginas
@@ -807,25 +841,54 @@
     }
 
     const CAT_SVG = {
-      servicios:    `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M18 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6M7 11l4 4-7 7 2 2 7-7 4 4V11H7z" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-      objetos:      `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 9h20l-2 13H6L4 9z" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9 3 5H2" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="24" r="1.5" stroke="#5BBD2F" stroke-width="1.4"/><circle cx="19" cy="24" r="1.5" stroke="#5BBD2F" stroke-width="1.4"/></svg>`,
-      jardineria:   `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4C9 4 6 9 8 14c1 3 4 5 6 9" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/><path d="M14 4c5 0 8 5 6 10-1 3-4 5-6 9" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/><path d="M8 15h12" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-      vehiculos:    `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="10" width="24" height="10" rx="3" stroke="#5BBD2F" stroke-width="1.4"/><circle cx="8" cy="20" r="3" stroke="#5BBD2F" stroke-width="1.4"/><circle cx="20" cy="20" r="3" stroke="#5BBD2F" stroke-width="1.4"/><path d="M11 10V8M17 10V8" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/><path d="M2 14h24" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-      vestimenta:   `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 4 5 8l3 2v13h12V10l3-2-5-4" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4c0 2 1 4 4 4s4-2 4-4" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-      herramientas: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M20 4a4 4 0 0 0-4 4c0 .7.2 1.4.5 2L6 20a2 2 0 0 0 0 2.8 2 2 0 0 0 2.8 0L19 12.5c.6.3 1.3.5 2 .5a4 4 0 0 0 0-8c-.4 0-.8 0-1.2.1L22 7.3l-2.5 2.5L18 8.3l2.5-2.5A4 4 0 0 0 20 4z" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-      muebles:      `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="10" width="20" height="10" rx="2" stroke="#5BBD2F" stroke-width="1.4"/><path d="M8 10V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/><path d="M4 16H2v4h2M24 16h2v4h-2M8 20v3M20 20v3" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-      regalos:      `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 13h18v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V13z" stroke="#5BBD2F" stroke-width="1.4"/><path d="M3 9h22v4H3z" stroke="#5BBD2F" stroke-width="1.4"/><path d="M14 9V24M14 9c0 0-4-1-4-4a3 3 0 0 1 4 4zM14 9c0 0 4-1 4-4a3 3 0 0 0-4 4z" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-      otro:         `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="#5BBD2F" stroke-width="1.4"/><circle cx="9" cy="14" r="1.2" fill="#5BBD2F"/><circle cx="14" cy="14" r="1.2" fill="#5BBD2F"/><circle cx="19" cy="14" r="1.2" fill="#5BBD2F"/></svg>`,
-      todo:         `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="11" cy="11" r="7" stroke="#5BBD2F" stroke-width="1.4"/><path d="M16.5 16.5L23 23" stroke="#5BBD2F" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      servicios:      `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M18 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6M7 11l4 4-7 7 2 2 7-7 4 4V11H7z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      libros:         `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 6h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" stroke="white" stroke-width="1.4"/><path d="M9 6V4h10a2 2 0 0 1 2 2v14" stroke="white" stroke-width="1.4" stroke-linecap="round"/><path d="M7 12h8M7 16h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      tecnologia:     `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="6" width="22" height="14" rx="2" stroke="white" stroke-width="1.4"/><path d="M10 24h8M14 20v4" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      herramientas:   `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M20 4a4 4 0 0 0-4 4c0 .7.2 1.4.5 2L6 20a2 2 0 1 0 2.8 2.8L19 12.5c.6.3 1.3.5 2 .5a4 4 0 0 0 0-8c-.4 0-.8 0-1.2.1L22 7.3l-2.5 2.5L18 8.3l2.5-2.5A4 4 0 0 0 20 4z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      vehiculos:      `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="10" width="24" height="10" rx="3" stroke="white" stroke-width="1.4"/><circle cx="8" cy="20" r="3" stroke="white" stroke-width="1.4"/><circle cx="20" cy="20" r="3" stroke="white" stroke-width="1.4"/><path d="M11 10V8M17 10V8" stroke="white" stroke-width="1.4" stroke-linecap="round"/><path d="M2 14h24" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      musica:         `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="8" cy="20" r="3" stroke="white" stroke-width="1.4"/><circle cx="20" cy="17" r="3" stroke="white" stroke-width="1.4"/><path d="M11 20V8l12-3v9" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      juguetes:       `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="white" stroke-width="1.4"/><path d="M14 9v10M9 14h10" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      jardineria:     `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4C9 4 6 9 8 14c1 3 4 5 6 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/><path d="M14 4c5 0 8 5 6 10-1 3-4 5-6 9" stroke="white" stroke-width="1.4" stroke-linecap="round"/><path d="M8 15h12" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      deportes:       `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="white" stroke-width="1.4"/><path d="M5.5 10.5c2.5 1 4 3 4 5.5M22.5 10.5c-2.5 1-4 3-4 5.5M14 5v18" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      camping:        `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 24L14 6l10 18H4z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 24l4-7 4 7" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      instrumentos:   `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M8 20a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="white" stroke-width="1.4"/><path d="M12 16V8l10-3v8" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="13" r="2" stroke="white" stroke-width="1.4"/></svg>`,
+      fotografia:     `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="8" width="24" height="16" rx="2" stroke="white" stroke-width="1.4"/><circle cx="14" cy="16" r="4" stroke="white" stroke-width="1.4"/><path d="M10 8l2-3h4l2 3" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      hogar:          `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 12L14 4l10 8" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v13h6v-6h4v6h6V10" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      ropa:           `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 4 5 8l3 2v13h12V10l3-2-5-4" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4c0 2 1 4 4 4s4-2 4-4" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      coleccionables: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3l2.8 5.6L23 9.7l-4.5 4.4 1.1 6.2L14 17.6l-5.6 2.7 1.1-6.2L5 9.7l6.2-.1L14 3z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      construccion:   `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="18" width="22" height="6" rx="1" stroke="white" stroke-width="1.4"/><rect x="7" y="12" width="14" height="6" stroke="white" stroke-width="1.4"/><rect x="11" y="6" width="6" height="6" stroke="white" stroke-width="1.4"/></svg>`,
+      artesanales:    `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z" stroke="white" stroke-width="1.4"/><path d="M14 8v6l4 2" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      regalos:        `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 13h18v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V13z" stroke="white" stroke-width="1.4"/><path d="M3 9h22v4H3z" stroke="white" stroke-width="1.4"/><path d="M14 9V24M14 9c0 0-4-1-4-4a3 3 0 0 1 4 4zM14 9c0 0 4-1 4-4a3 3 0 0 0-4 4z" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      otros:          `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="white" stroke-width="1.4"/><circle cx="9" cy="14" r="1.2" fill="white"/><circle cx="14" cy="14" r="1.2" fill="white"/><circle cx="19" cy="14" r="1.2" fill="white"/></svg>`,
+      todo:           `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="12" cy="12" r="7" stroke="white" stroke-width="1.4"/><path d="M17.5 17.5L23 23" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>`,
     };
+
+    let mostrandoTodasCats = false;
 
     function renderHallCats() {
       const container = document.getElementById('hall-cats');
-      container.innerHTML = CATEGORIAS.map(c => `
+      const verMasBtn = document.getElementById('hall-ver-mas-btn');
+      const catsAMostrar = mostrandoTodasCats
+        ? CATEGORIAS.filter(c => c.id !== 'todo')
+        : CATEGORIAS.filter(c => CATS_PRINCIPALES.includes(c.id));
+
+      container.innerHTML = catsAMostrar.map(c => `
         <div class="hall-cat" onclick="abrirCategoria('${c.id}')">
           <div class="hall-cat-icon">${CAT_SVG[c.id] || ''}</div>
-          <span class="hall-cat-nombre">${c.nombre}</span>
+          <div class="hall-cat-info">
+            <span class="hall-cat-nombre">${c.nombre}</span>
+            <span class="hall-cat-sub">${c.sub || ''}</span>
+          </div>
         </div>`).join('');
+
+      if (verMasBtn) {
+        verMasBtn.textContent = mostrandoTodasCats ? 'Ver menos ▴' : 'Ver todas las categorías ▾';
+      }
+    }
+
+    function toggleTodasCats() {
+      mostrandoTodasCats = !mostrandoTodasCats;
+      renderHallCats();
     }
 
     async function abrirCategoria(catId) {
@@ -960,7 +1023,10 @@
       const wrap = document.getElementById('cats-pub');
       if (wrap.children.length > 0) return;
       wrap.innerHTML = CATEGORIAS.filter(c => c.id !== 'todo').map(c =>
-        `<button class="cat-pill" onclick="seleccionarCat('${c.id}', this)">${CAT_SVG[c.id] || ''} ${c.nombre}</button>`
+        `<button class="cat-pill cat-pill-pub" onclick="seleccionarCat('${c.id}', this)">
+          <div style="width:22px;height:22px;flex-shrink:0;">${CAT_SVG[c.id] || ''}</div>
+          <span>${c.nombre}</span>
+        </button>`
       ).join('');
     }
 
