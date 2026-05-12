@@ -102,6 +102,11 @@
     .hall-cat-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
     .hall-cat-nombre { font-size: 0.82rem; font-weight: 700; color: white; line-height: 1.2; }
     .hall-cat-sub { font-size: 0.68rem; color: rgba(255,255,255,0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hall-cat-todo { background: var(--blanco) !important; border: 1.5px solid var(--verde) !important; box-shadow: none !important; }
+    .hall-cat-todo:hover { background: var(--verde-claro) !important; }
+    .hall-cat-icon-todo svg path, .hall-cat-icon-todo svg circle { stroke: var(--verde) !important; }
+    .hall-cat-nombre-todo { color: var(--texto) !important; }
+    .hall-cat-sub-todo { color: var(--texto-suave) !important; }
     .hall-ver-mas { width: 100%; height: 44px; border-radius: 12px; background: transparent; border: 1.5px solid var(--verde); color: var(--verde-oscuro); font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s; margin-top: 4px; }
     .hall-ver-mas:hover { background: var(--verde-claro); }
     .hall-ver-todo { width: 100%; height: 44px; border-radius: 12px; background: transparent; border: 1.5px solid rgba(91,189,47,0.3); color: var(--verde-oscuro); font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
@@ -879,7 +884,14 @@
             <span class="hall-cat-nombre">${c.nombre}</span>
             <span class="hall-cat-sub">${c.sub || ''}</span>
           </div>
-        </div>`).join('');
+        </div>`).join('') +
+        `<div class="hall-cat hall-cat-todo" onclick="abrirCategoria('todo')">
+          <div class="hall-cat-icon hall-cat-icon-todo">${CAT_SVG['todo'] || ''}</div>
+          <div class="hall-cat-info">
+            <span class="hall-cat-nombre hall-cat-nombre-todo">Todo</span>
+            <span class="hall-cat-sub hall-cat-sub-todo">Ver todas las ofertas</span>
+          </div>
+        </div>`;
 
       if (verMasBtn) {
         verMasBtn.textContent = mostrandoTodasCats ? 'Ver menos ▴' : 'Ver todas las categorías ▾';
