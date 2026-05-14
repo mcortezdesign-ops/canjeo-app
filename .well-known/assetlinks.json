@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "ar.com.canjeo.app.twa",
+    "sha256_cert_fingerprints": [
+      "C4:78:A5:03:A0:D8:5B:3F:BF:0E:9E:1F:0B:A3:2C:BC:94:AC:3A:C0:39:B6:DB:37:8A:67:70:0D:75:31:2A:58"
+    ]
+  }
+}]
