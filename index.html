@@ -315,8 +315,8 @@
 <div class="pantalla activa" id="p-splash" style="position:relative;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;">
   <img src="hola_vecino.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;">
  <div style="position:relative;z-index:10;padding:32px 24px 48px;pointer-events:auto;">
-    <button onclick="mostrarPantalla('p-bienvenida')" style="width:100%;background:#5BBD2F;color:white;border:none;border-radius:28px;padding:15px;font-size:16px;font-weight:600;margin-bottom:12px;">Entrar</button>
-    <button onclick="mostrarPantalla('p-bienvenida')" style="width:100%;background:transparent;color:white;border:2px solid white;border-radius:28px;padding:14px;font-size:16px;font-weight:600;">Registrarme</button>
+    <button id="btn-entrar" style="width:100%;background:#5BBD2F;color:white;border:none;border-radius:28px;padding:15px;font-size:16px;font-weight:600;margin-bottom:12px;">Entrar</button>
+<button id="btn-registrarse" style="width:100%;background:transparent;color:white;border:2px solid white;border-radius:28px;padding:14px;font-size:16px;font-weight:600;">Registrarme</button>
   </div>
 </div>
   <!-- PANTALLA 1: REGISTRO -->
@@ -1300,7 +1300,8 @@
       if (guardado) { mostrarPantalla('p-hall'); return; }
       // Si no hay datos locales, mostrar registro
       mostrarPantalla('p-splash');
-    }
+    } document.getElementById('btn-entrar').addEventListener('click', function(){ mostrarPantalla('p-bienvenida'); });
+document.getElementById('btn-registrarse').addEventListener('click', function(){ mostrarPantalla('p-bienvenida'); });
 
     function mostrarPantalla(id) {
       const actual = document.querySelector('.pantalla.activa');
