@@ -1302,8 +1302,10 @@
       mostrarPantalla('p-splash');
     } 
 
+    document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('btn-entrar').addEventListener('click', function(){ mostrarPantalla('p-bienvenida'); });
     document.getElementById('btn-registrarse').addEventListener('click', function(){ mostrarPantalla('p-bienvenida'); });
+  });
 
     function mostrarPantalla(id) {
       const actual = document.querySelector('.pantalla.activa');
