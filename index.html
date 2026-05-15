@@ -1309,6 +1309,8 @@
       document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
       document.getElementById(id).classList.add('activa');
       window.scrollTo(0, 0);
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       if (id === 'p-hall') cargarHall();
       if (id === 'p-perfil') cargarPerfil();
       if (id === 'p-publicar') initCatsPub();
