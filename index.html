@@ -458,7 +458,7 @@
         <div class="cats-wrap" id="cats-pub"></div>
       </div>
       <div class="campo">
-        <label class="label-verde">¿Qué buscás a cambio?</label>
+        <label class="label-verde">¿Qué te vendría bien?</label>
         <div class="regalo-toggle" onclick="toggleRegalo()">
           <div class="regalo-toggle-track" id="regalo-track"><div class="regalo-toggle-thumb"></div></div>
           <span class="regalo-toggle-lbl" id="regalo-lbl">Lo regalo, no pido nada</span>
@@ -499,15 +499,15 @@
         <button class="btn-leer-mas" id="btn-leer-mas" onclick="toggleDesc()">Leer más ▾</button>
       </div>
       <div class="detalle-busca-block">
-        <p class="detalle-busca-lbl" id="detalle-busca-lbl">Busca a cambio</p>
+        <p class="detalle-busca-lbl" id="detalle-busca-lbl">Le vendría bien</p>
         <p class="detalle-busca-txt" id="detalle-busca-txt"></p>
       </div>
       <a class="btn-whatsapp" id="detalle-whatsapp" href="#" target="_blank">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2C5.58 2 2 5.58 2 10c0 1.5.41 2.9 1.12 4.1L2 18l4.02-1.1A8 8 0 1010 2z" fill="white"/><path d="M7.5 6.5c.2.5 1.2 2.5 1.3 2.7.1.2 0 .4-.1.6l-.4.4c-.1.1-.1.3 0 .4.3.5.9 1.3 1.5 1.8.6.5 1.3.9 1.8 1 .2 0 .3 0 .4-.1l.4-.5c.1-.2.3-.2.5-.1l2.4 1.1c.2.1.3.3.2.5-.2.8-1 1.7-1.9 1.7-2.5 0-6.5-3.5-7-6.5-.2-1 .6-1.9 1.4-2.1.2 0 .4.1.5.3z" fill="#1A2B12"/></svg>
-        Proponer trueque por WhatsApp
+        Proponer intercambio por WhatsApp
       </a>
       <button class="btn-danger" id="btn-eliminar">Eliminar mi oferta</button>
-      <button class="btn-secundario" id="btn-valoracion" onclick="abrirValoracion()">Simular cierre de trueque</button>
+      <button class="btn-secundario" id="btn-valoracion" onclick="abrirValoracion()">Simular cierre de intercambio</button>
       <button class="btn-secundario" onclick="volverDesdDetalle()">Guardar para después</button>
     </div>
   </div>
@@ -524,7 +524,7 @@
       <p class="perfil-nombre" id="perfil-nombre">—</p>
       <p class="perfil-barrio"><span class="loc-dot"></span><span id="perfil-barrio">—</span></p>
       <div class="perfil-stats">
-        <div class="perfil-stat"><span class="perfil-stat-num" id="perfil-trueques">0</span><span class="perfil-stat-lbl">Trueques</span></div>
+        <div class="perfil-stat"><span class="perfil-stat-num" id="perfil-trueques">0</span><span class="perfil-stat-lbl">Canjes</span></div>
         <div class="perfil-stat"><span class="perfil-stat-num" id="perfil-cant-ofertas">0</span><span class="perfil-stat-lbl">Ofertas activas</span></div>
         <div class="perfil-stat"><span class="perfil-stat-num">—</span><span class="perfil-stat-lbl">Reputación</span></div>
       </div>
@@ -549,7 +549,7 @@
     </div>
     <div class="val-body">
       <div class="val-card">
-        <p class="val-card-titulo">¿Concretaron el trueque?</p>
+        <p class="val-card-titulo">¿Concretaron el intercambio?</p>
         <div class="val-partes">
           <div class="val-parte"><div class="val-avatar" id="val-avatar-yo"></div><span class="val-parte-nombre">Vos</span><span class="val-parte-item">Tu oferta</span></div>
           <div class="val-flecha"><svg width="32" height="16" viewBox="0 0 32 16" fill="none"><path d="M2 8h28M22 3l7 5-7 5" stroke="#5BBD2F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -980,7 +980,7 @@
             <div class="oferta-meta">
               <span class="oferta-dist">${o.barrio || 'Tu zona'}</span>
               ${o.cat === 'regalos' ? '<span class="etiqueta-regalo">🎁 Regalo</span>' : `<span class="oferta-cat">${catInfo ? catInfo.nombre : o.cat}</span>`}
-              <span class="oferta-rep">★ ${o.rep || '0 trueques'}</span>
+              <span class="oferta-rep">★ ${o.rep || '0 s'}</span>
             </div>
           </div>
         </div>`;
