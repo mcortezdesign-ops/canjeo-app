@@ -499,7 +499,7 @@
         <button class="btn-leer-mas" id="btn-leer-mas" onclick="toggleDesc()">Leer más ▾</button>
       </div>
       <div class="detalle-busca-block">
-        <p class="detalle-busca-lbl" id="detalle-busca-lbl">Le vendría bien</p>
+        <p class="detalle-busca-lbl" id="detalle-busca-lbl">Me vendría bien</p>
         <p class="detalle-busca-txt" id="detalle-busca-txt"></p>
       </div>
       <a class="btn-whatsapp" id="detalle-whatsapp" href="#" target="_blank">
@@ -1038,7 +1038,7 @@
       document.getElementById('detalle-titulo').textContent = o.titulo;
       document.getElementById('detalle-dist').textContent = o.barrio || 'Tu zona';
       document.getElementById('detalle-cat').textContent = o.cat === 'regalos' ? '🎁 Regalo' : (catInfo ? catInfo.nombre : o.cat);
-      document.getElementById('detalle-busca-lbl').textContent = o.cat === 'regalos' ? 'Lo regala sin pedir nada' : 'Le vendría bien';
+      document.getElementById('detalle-busca-lbl').textContent = o.cat === 'regalos' ? 'Lo regala sin pedir nada' : 'Me vendría bien';
       document.getElementById('detalle-busca-txt').textContent = o.cat === 'regalos' ? 'Esta persona lo regala. ¡Escribile!' : o.busca;
       document.getElementById('detalle-rep').textContent = '★ ' + (o.rep || '0 trueques');
       descExpandida = false;
