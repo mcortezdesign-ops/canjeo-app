@@ -714,7 +714,7 @@
             emoji: get(f, 'emoji') || '📦', fotos: get(f, 'fotos') || [],
             foto: get(f, 'foto'), barrio: get(f, 'barrio') || '',
             tel: get(f, 'tel') || '', nombreUsuario: get(f, 'nombreUsuario') || '',
-            rep: get(f, 'rep') || '0 trueques',
+            rep: get(f, 'rep') || '0 Canjes',
             fechaStr: get(f, 'fecha') || ''
           };
         });
@@ -976,7 +976,7 @@
           <div class="oferta-img">${primerFoto ? `<img src="${primerFoto}" loading="lazy">` : (catInfo ? catInfo.emoji : (o.emoji || '📦'))}</div>
           <div class="oferta-body">
             <p class="oferta-titulo">${o.titulo}</p>
-            <p class="oferta-busca">${o.cat === 'regalos' ? '🎁 Lo regala' : 'Busca: ' + o.busca}</p>
+            <p class="oferta-busca">${o.cat === 'regalos' ? '🎁 Lo regala' : 'Me vendría bien: ' + o.busca}</p>
             <div class="oferta-meta">
               <span class="oferta-dist">${o.barrio || 'Tu zona'}</span>
               ${o.cat === 'regalos' ? '<span class="etiqueta-regalo">🎁 Regalo</span>' : `<span class="oferta-cat">${catInfo ? catInfo.nombre : o.cat}</span>`}
@@ -1040,7 +1040,7 @@
       document.getElementById('detalle-cat').textContent = o.cat === 'regalos' ? '🎁 Regalo' : (catInfo ? catInfo.nombre : o.cat);
       document.getElementById('detalle-busca-lbl').textContent = o.cat === 'regalos' ? 'Lo regala sin pedir nada' : 'Me vendría bien';
       document.getElementById('detalle-busca-txt').textContent = o.cat === 'regalos' ? 'Esta persona lo regala. ¡Escribile!' : o.busca;
-      document.getElementById('detalle-rep').textContent = '★ ' + (o.rep || '0 trueques');
+      document.getElementById('detalle-rep').textContent = '★ ' + (o.rep || '0 Canjes');
       descExpandida = false;
       const descBlock = document.getElementById('detalle-desc-block');
       if (o.desc && o.desc.trim()) {
@@ -1157,7 +1157,7 @@
         cat: esRegalo ? 'regalos' : catSeleccionada,
         emoji: catInfo ? catInfo.emoji : '📦',
         fotos: fotosUrls, foto: fotosUrls[0] || null,
-        barrio: u.barrio || '', tel: u.tel || '', nombreUsuario: u.nombre || '', rep: '0 trueques'
+        barrio: u.barrio || '', tel: u.tel || '', nombreUsuario: u.nombre || '', rep: '0 Canjes'
       };
       try {
         const id = await window._fb.guardarOferta(oferta);
@@ -1195,7 +1195,7 @@
           <div class="oferta-img">${primerFoto ? `<img src="${primerFoto}" loading="lazy">` : (catInfo ? catInfo.emoji : '📦')}</div>
           <div class="oferta-body">
             <p class="oferta-titulo">${o.titulo}</p>
-            <p class="oferta-busca">${o.cat === 'regalos' ? '🎁 Lo regala' : 'Busca: ' + o.busca}</p>
+            <p class="oferta-busca">${o.cat === 'regalos' ? '🎁 Lo regala' : 'Me vendría bien: ' + o.busca}</p>
             <div class="oferta-meta">${o.cat === 'regalos' ? '<span class="etiqueta-regalo">🎁 Regalo</span>' : `<span class="oferta-cat">${catInfo ? catInfo.nombre : o.cat}</span>`}</div>
           </div>
         </div>`;
